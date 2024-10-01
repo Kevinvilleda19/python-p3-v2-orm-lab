@@ -14,6 +14,11 @@ class TestReview:
         CURSOR.execute("DROP TABLE IF EXISTS reviews")
         CURSOR.execute("DROP TABLE IF EXISTS employees")
         CURSOR.execute("DROP TABLE IF EXISTS departments")
+        Review.all = {}
+
+    # If Employee and Department classes also have class-level caches, clear them too
+        Employee.all = {}
+        Department.all = {}
 
     def test_creates_table(self):
         '''contains method "create_table()" that creates table "reviews" if it does not exist.'''
@@ -34,7 +39,7 @@ class TestReview:
         """
         CURSOR.execute(sql)
 
-        sql = """  
+        sql = """
             CREATE TABLE IF NOT EXISTS employees (
             id INTEGER PRIMARY KEY,
             name TEXT,
@@ -225,14 +230,14 @@ class TestReview:
                 (None, 2020, "Usually double checks their work", employee.id))
         # assert dictionary entry was deleted
         assert(Review.all.get(id1) is None)
-        
+
         review = Review.find_by_id(id2)
         # assert review2 row not modified, review2 object not modified
         assert ((review.id, review.year, review.summary, review.employee_id) ==
                 (review2.id, review2.year, review2.summary, review2.employee_id) ==
                 (id2, 2000, "Takes long lunches", employee.id))
 
-    
+
     def test_gets_all(self):
         '''contains method "get_all()" that returns a list of Review instances for every record in the db.'''
 
@@ -255,4 +260,3 @@ class TestReview:
         assert ((reviews[1].id, reviews[1].year, reviews[1].summary, reviews[1].employee_id) ==
                 (review2.id, review2.year, review2.summary, review2.employee_id))
 
- 

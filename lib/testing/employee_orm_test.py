@@ -14,10 +14,10 @@ class TestEmployee:
 
         CURSOR.execute("DROP TABLE IF EXISTS employees")
         CURSOR.execute("DROP TABLE IF EXISTS departments")
-        
+
         Department.all = {}
         Employee.all = {}
-        
+
     def test_creates_table(self):
         '''contains method "create_table()" that creates table "employees" if it does not exist.'''
 
@@ -36,7 +36,7 @@ class TestEmployee:
         """
         CURSOR.execute(sql)
 
-        sql = """  
+        sql = """
             CREATE TABLE IF NOT EXISTS employees (
             id INTEGER PRIMARY KEY,
             name TEXT,
@@ -184,7 +184,7 @@ class TestEmployee:
         employee = Employee.find_by_name("Unknown")
         assert (employee is None)
 
- 
+
 
     def test_updates_row(self):
         '''contains a method "update()" that updates an instance's corresponding database record to match its new attribute values.'''
@@ -242,7 +242,7 @@ class TestEmployee:
                 (None, "Raha", "Accountant", department.id))
         # assert dictionary entry was deleted
         assert(Employee.all.get(id1) is None)
-        
+
         employee = Employee.find_by_id(id2)
         # assert employee2 row not modified, employee2 object not modified
         assert ((employee.id, employee.name, employee.job_title, employee.department_id) ==
@@ -273,24 +273,24 @@ class TestEmployee:
     def test_get_reviews(self):
         '''contain a method "reviews" that gets the reviews for the current Employee instance '''
 
-        from review import Review  # avoid circular import issue
+        from lib.review import Review  # avoid circular import issue
         Review.all = {}
         CURSOR.execute("DROP TABLE IF EXISTS reviews")
 
 
         Department.create_table()
         department1 = Department.create("Payroll", "Building A, 5th Floor")
-        
+
         Employee.create_table()
         employee1 = Employee.create("Raha", "Accountant", department1.id)
         employee2 = Employee.create(
             "Tal", "Senior Accountant", department1.id)
-        
+
         Review.create_table()
         review1 = Review.create(2022, "Good Python coding skills", employee1.id)
         review2 = Review.create(2023, "Great Python coding skills", employee1.id)
         review3 = Review.create(2022, "Good SQL coding skills", employee2.id)
-        
+
         reviews = employee1.reviews()
         assert (len(reviews) == 2)
         assert ((reviews[0].id, reviews[0].year, reviews[0].summary, reviews[0].employee_id) ==
